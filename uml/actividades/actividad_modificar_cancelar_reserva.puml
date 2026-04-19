@@ -1,0 +1,52 @@
+@startuml
+skinparam shadowing false
+skinparam activity {
+  BackgroundColor white
+  BorderColor black
+  ArrowColor black
+}
+
+|Cliente|
+start
+:Iniciar sesión;
+:Acceder a Mis reservas;
+:Seleccionar reserva;
+
+|Sistema|
+:Validar estado de la reserva;
+
+if (¿Reserva gestionable?) then (Sí)
+
+  |Cliente|
+  :Elegir acción;
+
+  if (¿Modificar?) then (Sí)
+    :Ingresar nuevos datos de reserva;
+
+    |Sistema|
+    :Validar disponibilidad y reglas del cambio;
+
+    if (¿Datos válidos y disponibilidad?) then (Sí)
+      :Recalcular total,\nabono y saldo;
+      :Actualizar reserva;
+      :Mostrar confirmación;
+      stop
+    else (No)
+      :Mostrar error y permitir reintento;
+      stop
+    endif
+
+  else (No)
+    :Confirmar cancelación;
+
+    |Sistema|
+    :Actualizar estado a Cancelada;
+    :Mostrar resultado de cancelación;
+    stop
+  endif
+
+else (No)
+  :Informar que la reserva no puede modificarse ni cancelarse;
+  stop
+endif
+@enduml

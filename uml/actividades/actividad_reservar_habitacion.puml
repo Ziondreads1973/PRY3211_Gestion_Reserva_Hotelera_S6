@@ -1,0 +1,60 @@
+@startuml
+skinparam shadowing false
+skinparam activity {
+  BackgroundColor white
+  BorderColor black
+  ArrowColor black
+}
+
+|Cliente|
+start
+:Ingresar fechas y cantidad de huéspedes;
+
+|Sistema|
+:Validar datos de búsqueda;
+
+if (¿Datos válidos?) then (Sí)
+  :Consultar disponibilidad;
+  :Mostrar habitaciones disponibles;
+
+  |Cliente|
+  :Seleccionar habitación;
+
+  |Sistema|
+  :Mostrar detalle,\nprecio total y abono requerido;
+
+  |Cliente|
+  :Confirmar reserva e ingresar datos;
+
+  |Sistema|
+  :Validar disponibilidad actual;
+
+  if (¿Habitación disponible?) then (Sí)
+    :Registrar reserva en estado Pendiente;
+
+    |Pasarela de pago|
+    :Procesar pago;
+
+    if (¿Pago aprobado?) then (Sí)
+      |Sistema|
+      :Registrar pago;
+      :Actualizar reserva a Confirmada;
+      :Generar ticket QR;
+      :Mostrar confirmación al cliente;
+      stop
+    else (No)
+      |Sistema|
+      :Informar rechazo de pago\ny mantener reserva pendiente;
+      stop
+    endif
+
+  else (No)
+    :Informar indisponibilidad;
+    stop
+  endif
+
+else (No)
+  :Mostrar error en datos de búsqueda;
+  stop
+endif
+@enduml

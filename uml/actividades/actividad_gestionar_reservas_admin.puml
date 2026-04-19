@@ -1,0 +1,33 @@
+@startuml
+skinparam shadowing false
+skinparam activity {
+  BackgroundColor white
+  BorderColor black
+  ArrowColor black
+}
+
+|Administrador|
+start
+:Iniciar sesión;
+:Acceder a gestión de reservas;
+:Aplicar filtros de búsqueda;
+:Seleccionar reserva;
+
+|Sistema|
+:Mostrar detalle de la reserva;
+
+|Administrador|
+:Seleccionar nuevo estado;
+
+|Sistema|
+:Validar transición de estado;
+
+if (¿Transición válida?) then (Sí)
+  :Actualizar estado de la reserva;
+  :Mostrar confirmación;
+  stop
+else (No)
+  :Mostrar error y mantener estado actual;
+  stop
+endif
+@enduml
