@@ -1,0 +1,113 @@
+@startuml
+hide circle
+skinparam shadowing false
+skinparam linetype ortho
+
+entity "rol" as rol {
+  *id_rol : INT
+  --
+  nombre : VARCHAR(50)
+  descripcion : VARCHAR(150)
+}
+
+entity "usuario" as usuario {
+  *id_usuario : INT
+  --
+  id_rol : INT <<FK>>
+  rut : VARCHAR(20)
+  nombres : VARCHAR(100)
+  apellidos : VARCHAR(100)
+  correo : VARCHAR(120)
+  contrasena : VARCHAR(120)
+  telefono : VARCHAR(20)
+  idioma : VARCHAR(10)
+  estado : VARCHAR(20)
+}
+
+entity "cliente" as cliente {
+  *id_cliente : INT
+  --
+  id_usuario : INT <<FK>>
+  fecha_registro : DATE
+  estado_cliente : VARCHAR(20)
+}
+
+entity "tipo_habitacion" as tipo_habitacion {
+  *id_tipo_habitacion : INT
+  --
+  nombre : VARCHAR(60)
+  descripcion : VARCHAR(200)
+  capacidad_maxima : INT
+  cantidad_camas : INT
+  precio_base : DECIMAL(10,2)
+  estado : VARCHAR(20)
+}
+
+entity "habitacion" as habitacion {
+  *id_habitacion : INT
+  --
+  id_tipo_habitacion : INT <<FK>>
+  numero : VARCHAR(10)
+  piso : INT
+  capacidad : INT
+  descripcion : VARCHAR(200)
+  estado : VARCHAR(20)
+}
+
+entity "tarifa" as tarifa {
+  *id_tarifa : INT
+  --
+  id_tipo_habitacion : INT <<FK>>
+  fecha_inicio : DATE
+  fecha_termino : DATE
+  precio_noche : DECIMAL(10,2)
+  estado : VARCHAR(20)
+}
+
+entity "reserva" as reserva {
+  *id_reserva : INT
+  --
+  id_cliente : INT <<FK>>
+  id_habitacion : INT <<FK>>
+  fecha_reserva : DATE
+  fecha_check_in : DATE
+  fecha_check_out : DATE
+  cantidad_huespedes : INT
+  estado_reserva : VARCHAR(20)
+  total_reserva : DECIMAL(10,2)
+  abono_requerido : DECIMAL(10,2)
+  saldo_pendiente : DECIMAL(10,2)
+  codigo_reserva : VARCHAR(30)
+}
+
+entity "pago" as pago {
+  *id_pago : INT
+  --
+  id_reserva : INT <<FK>>
+  fecha_pago : DATE
+  monto : DECIMAL(10,2)
+  metodo_pago : VARCHAR(30)
+  estado_pago : VARCHAR(20)
+  referencia_pago : VARCHAR(50)
+}
+
+entity "ticket_qr" as ticket_qr {
+  *id_ticket : INT
+  --
+  id_reserva : INT <<FK>>
+  codigo_qr : VARCHAR(60)
+  fecha_emision : DATE
+  url_qr : VARCHAR(255)
+  estado : VARCHAR(20)
+}
+
+rol "1" -- "N" usuario
+usuario "1" -- "0..1" cliente
+cliente "1" -- "N" reserva
+tipo_habitacion "1" -- "N" habitacion
+tipo_habitacion "1" -- "N" tarifa
+habitacion "1" -- "N" reserva
+reserva "1" -- "N" pago
+reserva "1" -- "0..1" ticket_qr
+
+@enduml
