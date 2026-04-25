@@ -1,0 +1,51 @@
+{% extends "base.html" %} {% block title %}Inicio | Hotel Pacific Reef{%
+endblock %} {% block content %}
+
+<section class="card">
+  <h2>Prototipo funcional MVP</h2>
+
+  <p>
+    Este prototipo corresponde al avance funcional de Semana 7 del sistema Hotel
+    Pacific Reef. Su objetivo es demostrar la integración inicial entre
+    front-end, back-end y base de datos en un ambiente de prueba.
+  </p>
+
+  <div class="actions">
+    <a class="button" href="{{ url_for('disponibilidad') }}">
+      Consultar disponibilidad
+    </a>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Alcance del MVP</h2>
+
+  <ul>
+    <li>Consulta de disponibilidad de habitaciones.</li>
+    <li>Listado de habitaciones disponibles.</li>
+    <li>Registro básico de reserva.</li>
+    <li>Cálculo de abono del 30%.</li>
+    <li>Vista administrativa simple de reservas.</li>
+  </ul>
+</section>
+
+{% if db_status %}
+<section class="card">
+  <h2>Estado de conexión a base de datos</h2>
+
+  {% if db_status.ok %}
+  <p class="success">{{ db_status.message }}</p>
+  <p><strong>Ruta:</strong> {{ db_status.database }}</p>
+
+  <h3>Tablas detectadas</h3>
+  <ul>
+    {% for table in db_status.tables %}
+    <li>{{ table }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="error">{{ db_status.message }}</p>
+  <p><strong>Ruta esperada:</strong> {{ db_status.database }}</p>
+  {% endif %}
+</section>
+{% endif %} {% endblock %}
