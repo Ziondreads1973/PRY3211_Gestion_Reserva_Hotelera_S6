@@ -6,8 +6,10 @@ from flask import Flask, redirect, render_template, request, url_for
 from database import (
     buscar_habitaciones_disponibles,
     crear_reserva,
+    listar_reservas_admin,
     obtener_habitacion_por_id,
     obtener_reserva_por_id,
+    obtener_resumen_reservas_admin,
     test_db_connection,
 )
 
@@ -348,6 +350,21 @@ def confirmacion(id_reserva):
 
     return render_template("confirmacion.html", reserva=reserva)
 
+@app.route("/admin/reservas")
+def admin_reservas():
+    """
+    Vista administrativa simple para consultar reservas registradas.
+    Esta vista permite validar que las reservas creadas desde el flujo cliente
+    quedan disponibles para revisión administrativa.
+    """
+    reservas = listar_reservas_admin()
+    resumen = obtener_resumen_reservas_admin()
+
+    return render_template(
+        "admin_reservas.html",
+        reservas=reservas,
+        resumen=resumen,
+    )
 
 @app.route("/health-db")
 def health_db():

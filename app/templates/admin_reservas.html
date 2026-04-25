@@ -1,0 +1,93 @@
+{% extends "base.html" %} {% block title %}Panel administrador | Hotel Pacific
+Reef{% endblock %} {% block content %}
+
+<section class="card">
+  <h2>Panel administrador - Reservas</h2>
+
+  <p>
+    Esta vista permite revisar las reservas registradas en la base de datos del
+    sistema Hotel Pacific Reef. Corresponde a una funcionalidad administrativa
+    básica del MVP de Semana 7.
+  </p>
+
+  {% if resumen %}
+  <div class="admin-summary">
+    <div class="metric-card">
+      <span class="metric-label">Total reservas</span>
+      <strong>{{ resumen.total_reservas }}</strong>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-label">Confirmadas</span>
+      <strong>{{ resumen.confirmadas }}</strong>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-label">Pendientes</span>
+      <strong>{{ resumen.pendientes }}</strong>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-label">Canceladas</span>
+      <strong>{{ resumen.canceladas }}</strong>
+    </div>
+
+    <div class="metric-card">
+      <span class="metric-label">Monto total</span>
+      <strong>{{ resumen.monto_total_reservas | clp }}</strong>
+    </div>
+  </div>
+  {% endif %} {% if reservas %}
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Código</th>
+          <th>Habitación</th>
+          <th>Tipo</th>
+          <th>Entrada</th>
+          <th>Salida</th>
+          <th>Huéspedes</th>
+          <th>Estado</th>
+          <th>Total</th>
+          <th>Abono</th>
+          <th>Saldo</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for reserva in reservas %}
+        <tr>
+          <td>{{ reserva.id_reserva }}</td>
+          <td>{{ reserva.codigo_reserva }}</td>
+          <td>{{ reserva.numero_habitacion }}</td>
+          <td>{{ reserva.tipo_habitacion }}</td>
+          <td>{{ reserva.fecha_check_in }}</td>
+          <td>{{ reserva.fecha_check_out }}</td>
+          <td>{{ reserva.cantidad_huespedes }}</td>
+          <td>
+            <span class="status-pill status-{{ reserva.estado_reserva|lower }}">
+              {{ reserva.estado_reserva }}
+            </span>
+          </td>
+          <td>{{ reserva.total_reserva | clp }}</td>
+          <td>{{ reserva.abono_requerido | clp }}</td>
+          <td>{{ reserva.saldo_pendiente | clp }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h3>No existen reservas registradas</h3>
+    <p>
+      Aún no existen reservas en la base de datos para mostrar en el panel
+      administrador.
+    </p>
+  </div>
+  {% endif %}
+</section>
+
+{% endblock %}

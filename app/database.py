@@ -273,3 +273,63 @@ def obtener_reserva_por_id(id_reserva):
     connection.close()
 
     return reserva
+
+def listar_reservas_admin():
+    """
+    Lista las reservas registradas para la vista administrativa del MVP.
+    Se muestran datos principales de la reserva, habitación y tipo de habitación.
+    """
+    connection = get_db_connection()
+
+    query = """
+        SELECT
+            r.id_reserva,
+            r.id_cliente,
+            r.id_habitacion,
+            r.fecha_reserva,
+            r.fecha_check_in,
+            r.fecha_check_out,
+            r.cantidad_huespedes,
+            r.estado_reserva,
+            r.total_reserva,
+            r.abono_requerido,
+            r.saldo_pendiente,
+            r.codigo_reserva,
+            h.numero AS numero_habitacion,
+            h.piso,
+            th.nombre AS tipo_habitacion
+        FROM reserva r
+        INNER JOIN habitacion h
+            ON r.id_habitacion = h.id_habitacion
+        INNER JOIN tipo_habitacion th
+            ON h.id_tipo_habitacion = th.id_tipo_habitacion
+        ORDER BY
+            r.id_reserva DESC;
+    """
+
+    reservas = connection.execute(query).fetchall()
+    connection.close()
+
+    return reservas
+
+
+def obtener_resumen_reservas_admin():
+    """
+    Obtiene indicadores básicos para la vista administrativa.
+    """
+    connection = get_db_connection()
+
+    query = """
+        SELECT
+            COUNT(*) AS total_reservas,
+            SUM(CASE WHEN LOWER(TRIM(estado_reserva)) = 'confirmada' THEN 1 ELSE 0 END) AS confirmadas,
+            SUM(CASE WHEN LOWER(TRIM(estado_reserva)) = 'pendiente' THEN 1 ELSE 0 END) AS pendientes,
+            SUM(CASE WHEN LOWER(TRIM(estado_reserva)) = 'cancelada' THEN 1 ELSE 0 END) AS canceladas,
+            COALESCE(SUM(total_reserva), 0) AS monto_total_reservas
+        FROM reserva;
+    """
+
+    resumen = connection.execute(query).fetchone()
+    connection.close()
+
+    return resumen
