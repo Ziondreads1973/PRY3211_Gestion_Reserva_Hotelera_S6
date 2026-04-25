@@ -1,43 +1,62 @@
-{% extends "base.html" %} {% block title %}Consultar disponibilidad | Hotel
-Pacific Reef{% endblock %} {% block content %}
+{% extends "base.html" %}
+
+{% block title %}Consultar disponibilidad | Hotel Pacific Reef{% endblock %}
+
+{% block content %}
 
 <section class="card">
-  <h2>Consultar disponibilidad</h2>
+    <h2>Consultar disponibilidad</h2>
 
-  <p>
-    Ingrese las fechas de estadía y la cantidad de huéspedes para consultar
-    habitaciones disponibles en el Hotel Pacific Reef.
-  </p>
+    <p>
+        Ingrese las fechas de estadía y la cantidad de huéspedes para consultar
+        habitaciones disponibles en el Hotel Pacific Reef.
+    </p>
 
-  <form class="form" method="POST" action="#">
-    <div class="form-group">
-      <label for="fecha_check_in">Fecha de entrada</label>
-      <input type="date" id="fecha_check_in" name="fecha_check_in" required />
-    </div>
+    {% if error %}
+        <div class="alert error-box">
+            {{ error }}
+        </div>
+    {% endif %}
 
-    <div class="form-group">
-      <label for="fecha_check_out">Fecha de salida</label>
-      <input type="date" id="fecha_check_out" name="fecha_check_out" required />
-    </div>
+    <form class="form" method="POST" action="{{ url_for('disponibilidad') }}">
+        <div class="form-group">
+            <label for="fecha_check_in">Fecha de entrada</label>
+            <input
+                type="date"
+                id="fecha_check_in"
+                name="fecha_check_in"
+                value="{{ values.fecha_check_in if values else '' }}"
+                required
+            >
+        </div>
 
-    <div class="form-group">
-      <label for="cantidad_huespedes">Cantidad de huéspedes</label>
-      <input
-        type="number"
-        id="cantidad_huespedes"
-        name="cantidad_huespedes"
-        min="1"
-        required
-      />
-    </div>
+        <div class="form-group">
+            <label for="fecha_check_out">Fecha de salida</label>
+            <input
+                type="date"
+                id="fecha_check_out"
+                name="fecha_check_out"
+                value="{{ values.fecha_check_out if values else '' }}"
+                required
+            >
+        </div>
 
-    <button class="button" type="submit">Buscar habitaciones</button>
-  </form>
+        <div class="form-group">
+            <label for="cantidad_huespedes">Cantidad de huéspedes</label>
+            <input
+                type="number"
+                id="cantidad_huespedes"
+                name="cantidad_huespedes"
+                min="1"
+                value="{{ values.cantidad_huespedes if values else '' }}"
+                required
+            >
+        </div>
 
-  <p class="note">
-    Nota: en este hito se construye la vista base. En el siguiente hito se
-    activará la consulta real contra SQLite.
-  </p>
+        <button class="button" type="submit">
+            Buscar habitaciones
+        </button>
+    </form>
 </section>
 
 {% endblock %}

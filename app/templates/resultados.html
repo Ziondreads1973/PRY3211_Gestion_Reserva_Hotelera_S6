@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Resultados de disponibilidad | Hotel Pacific Reef{% endblock %}
+
+{% block content %}
+
+<section class="card">
+    <h2>Habitaciones disponibles</h2>
+
+    <div class="summary">
+        <p><strong>Fecha de entrada:</strong> {{ fecha_check_in }}</p>
+        <p><strong>Fecha de salida:</strong> {{ fecha_check_out }}</p>
+        <p><strong>Noches:</strong> {{ cantidad_noches }}</p>
+        <p><strong>Huéspedes:</strong> {{ cantidad_huespedes }}</p>
+    </div>
+
+    {% if habitaciones %}
+        <p class="success">
+            Se encontraron {{ habitaciones|length }} habitación(es) disponible(s)
+            para los criterios ingresados.
+        </p>
+
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>N° Habitación</th>
+                        <th>Tipo</th>
+                        <th>Piso</th>
+                        <th>Capacidad</th>
+                        <th>Camas</th>
+                        <th>Precio noche</th>
+                        <th>Estado</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for habitacion in habitaciones %}
+                        <tr>
+                            <td>{{ habitacion.numero }}</td>
+                            <td>{{ habitacion.tipo_habitacion }}</td>
+                            <td>{{ habitacion.piso }}</td>
+                            <td>{{ habitacion.capacidad }}</td>
+                            <td>{{ habitacion.cantidad_camas }}</td>
+                            <td>{{ habitacion.precio_noche | clp }}</td>
+                            <td>{{ habitacion.estado_habitacion }}</td>
+                            <td>
+                                <button class="button-disabled" disabled>
+                                    Reserva en siguiente hito
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+        <div class="empty-state">
+            <h3>No se encontraron habitaciones disponibles</h3>
+            <p>
+                No existen habitaciones disponibles para el rango de fechas y cantidad
+                de huéspedes ingresados. Intente con otro rango de fechas o menor
+                cantidad de huéspedes.
+            </p>
+        </div>
+    {% endif %}
+
+    <div class="actions">
+        <a class="button" href="{{ url_for('disponibilidad') }}">
+            Realizar nueva búsqueda
+        </a>
+    </div>
+</section>
+
+{% endblock %}
