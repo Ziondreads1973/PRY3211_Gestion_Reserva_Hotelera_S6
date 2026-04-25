@@ -1,0 +1,99 @@
+{% extends "base.html" %} {% block title %}Registrar reserva | Hotel Pacific
+Reef{% endblock %} {% block content %}
+
+<section class="card">
+  <h2>Registrar reserva</h2>
+
+  {% if error %}
+  <div class="alert error-box">{{ error }}</div>
+
+  <div class="actions">
+    <a class="button" href="{{ url_for('disponibilidad') }}">
+      Volver a consultar disponibilidad
+    </a>
+  </div>
+  {% endif %} {% if habitacion %}
+  <div class="detail-grid">
+    <div>
+      <h3>Habitación seleccionada</h3>
+      <p><strong>N° habitación:</strong> {{ habitacion.numero }}</p>
+      <p><strong>Tipo:</strong> {{ habitacion.tipo_habitacion }}</p>
+      <p><strong>Piso:</strong> {{ habitacion.piso }}</p>
+      <p><strong>Capacidad:</strong> {{ habitacion.capacidad }}</p>
+      <p><strong>Precio noche:</strong> {{ habitacion.precio_noche | clp }}</p>
+    </div>
+
+    <div>
+      <h3>Resumen de estadía</h3>
+      <p><strong>Fecha entrada:</strong> {{ fecha_check_in }}</p>
+      <p><strong>Fecha salida:</strong> {{ fecha_check_out }}</p>
+      <p><strong>Noches:</strong> {{ cantidad_noches }}</p>
+      <p><strong>Huéspedes:</strong> {{ cantidad_huespedes }}</p>
+    </div>
+
+    <div>
+      <h3>Valores calculados</h3>
+      <p><strong>Total reserva:</strong> {{ total_reserva | clp }}</p>
+      <p><strong>Abono requerido 30%:</strong> {{ abono_requerido | clp }}</p>
+      <p><strong>Saldo pendiente:</strong> {{ saldo_pendiente | clp }}</p>
+    </div>
+  </div>
+
+  <form
+    class="form"
+    method="POST"
+    action="{{ url_for('reservar', id_habitacion=habitacion.id_habitacion) }}"
+  >
+    <input type="hidden" name="fecha_check_in" value="{{ fecha_check_in }}" />
+    <input type="hidden" name="fecha_check_out" value="{{ fecha_check_out }}" />
+    <input
+      type="hidden"
+      name="cantidad_huespedes"
+      value="{{ cantidad_huespedes }}"
+    />
+
+    <div class="form-group">
+      <label for="nombre_contacto">Nombre de contacto</label>
+      <input
+        type="text"
+        id="nombre_contacto"
+        name="nombre_contacto"
+        placeholder="Ejemplo: Cliente de prueba"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="correo_contacto">Correo electrónico</label>
+      <input
+        type="email"
+        id="correo_contacto"
+        name="correo_contacto"
+        placeholder="cliente@correo.cl"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="telefono_contacto">Teléfono</label>
+      <input
+        type="text"
+        id="telefono_contacto"
+        name="telefono_contacto"
+        placeholder="+56 9 1234 5678"
+        required
+      />
+    </div>
+
+    <p class="note">
+      Para este MVP de Semana 7 se utiliza un cliente de prueba existente en la
+      base de datos. El foco de esta iteración es validar el flujo funcional de
+      reserva.
+    </p>
+
+    <button class="button" type="submit">Confirmar reserva</button>
+  </form>
+  {% endif %}
+</section>
+
+{% endblock %}

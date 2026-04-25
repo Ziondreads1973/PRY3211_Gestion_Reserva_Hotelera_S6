@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import date
 from pathlib import Path
 
 
@@ -120,3 +121,155 @@ def buscar_habitaciones_disponibles(
 
     connection.close()
     return rows
+
+
+def obtener_habitacion_por_id(id_habitacion, fecha_referencia=None):
+    """
+    Obtiene los datos de una habitación específica, incluyendo su tipo y precio.
+    """
+    fecha_referencia = fecha_referencia or date.today().isoformat()
+
+    connection = get_db_connection()
+
+    query = """
+        SELECT
+            h.id_habitacion,
+            h.numero,
+            h.piso,
+            h.capacidad,
+            h.descripcion AS descripcion_habitacion,
+            h.estado AS estado_habitacion,
+            th.nombre AS tipo_habitacion,
+            th.descripcion AS descripcion_tipo,
+            th.cantidad_camas,
+            COALESCE(t.precio_noche, th.precio_base) AS precio_noche
+        FROM habitacion h
+        INNER JOIN tipo_habitacion th
+            ON h.id_tipo_habitacion = th.id_tipo_habitacion
+        LEFT JOIN tarifa t
+            ON t.id_tipo_habitacion = th.id_tipo_habitacion
+            AND LOWER(TRIM(t.estado)) = 'activa'
+            AND DATE(?) >= DATE(t.fecha_inicio)
+            AND (
+                t.fecha_termino IS NULL
+                OR DATE(?) <= DATE(t.fecha_termino)
+            )
+        WHERE h.id_habitacion = ?;
+    """
+
+    habitacion = connection.execute(
+        query,
+        (
+            fecha_referencia,
+            fecha_referencia,
+            id_habitacion,
+        ),
+    ).fetchone()
+
+    connection.close()
+    return habitacion
+
+
+def crear_reserva(
+    id_cliente,
+    id_habitacion,
+    fecha_check_in,
+    fecha_check_out,
+    cantidad_huespedes,
+    total_reserva,
+    abono_requerido,
+    saldo_pendiente,
+    codigo_reserva,
+):
+    """
+    Registra una nueva reserva en la base de datos SQLite.
+    Para el MVP se utiliza un cliente de prueba previamente existente.
+    """
+    connection = get_db_connection()
+
+    query = """
+        INSERT INTO reserva (
+            id_cliente,
+            id_habitacion,
+            fecha_reserva,
+            fecha_check_in,
+            fecha_check_out,
+            cantidad_huespedes,
+            estado_reserva,
+            total_reserva,
+            abono_requerido,
+            saldo_pendiente,
+            codigo_reserva
+        )
+        VALUES (
+            ?,
+            ?,
+            DATE('now'),
+            ?,
+            ?,
+            ?,
+            'Pendiente',
+            ?,
+            ?,
+            ?,
+            ?
+        );
+    """
+
+    cursor = connection.execute(
+        query,
+        (
+            id_cliente,
+            id_habitacion,
+            fecha_check_in,
+            fecha_check_out,
+            cantidad_huespedes,
+            total_reserva,
+            abono_requerido,
+            saldo_pendiente,
+            codigo_reserva,
+        ),
+    )
+
+    connection.commit()
+    id_reserva = cursor.lastrowid
+    connection.close()
+
+    return id_reserva
+
+
+def obtener_reserva_por_id(id_reserva):
+    """
+    Obtiene una reserva registrada, junto con la habitación y tipo asociado.
+    """
+    connection = get_db_connection()
+
+    query = """
+        SELECT
+            r.id_reserva,
+            r.id_cliente,
+            r.id_habitacion,
+            r.fecha_reserva,
+            r.fecha_check_in,
+            r.fecha_check_out,
+            r.cantidad_huespedes,
+            r.estado_reserva,
+            r.total_reserva,
+            r.abono_requerido,
+            r.saldo_pendiente,
+            r.codigo_reserva,
+            h.numero AS numero_habitacion,
+            h.piso,
+            th.nombre AS tipo_habitacion
+        FROM reserva r
+        INNER JOIN habitacion h
+            ON r.id_habitacion = h.id_habitacion
+        INNER JOIN tipo_habitacion th
+            ON h.id_tipo_habitacion = th.id_tipo_habitacion
+        WHERE r.id_reserva = ?;
+    """
+
+    reserva = connection.execute(query, (id_reserva,)).fetchone()
+    connection.close()
+
+    return reserva

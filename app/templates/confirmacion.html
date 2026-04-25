@@ -1,0 +1,57 @@
+{% extends "base.html" %} {% block title %}Confirmación de reserva | Hotel
+Pacific Reef{% endblock %} {% block content %}
+
+<section class="card">
+  <h2>Confirmación de reserva</h2>
+
+  {% if error %}
+  <div class="alert error-box">{{ error }}</div>
+  {% endif %} {% if reserva %}
+  <div class="reservation-box">
+    <h3>Reserva registrada correctamente</h3>
+
+    <p class="success">
+      La reserva fue registrada en la base de datos SQLite en estado
+      <strong>{{ reserva.estado_reserva }}</strong>.
+    </p>
+
+    <div class="detail-grid">
+      <div>
+        <h3>Datos de la reserva</h3>
+        <p><strong>Código:</strong> {{ reserva.codigo_reserva }}</p>
+        <p><strong>ID reserva:</strong> {{ reserva.id_reserva }}</p>
+        <p><strong>Fecha reserva:</strong> {{ reserva.fecha_reserva }}</p>
+        <p><strong>Estado:</strong> {{ reserva.estado_reserva }}</p>
+      </div>
+
+      <div>
+        <h3>Estadía</h3>
+        <p><strong>Habitación:</strong> {{ reserva.numero_habitacion }}</p>
+        <p><strong>Tipo:</strong> {{ reserva.tipo_habitacion }}</p>
+        <p><strong>Fecha entrada:</strong> {{ reserva.fecha_check_in }}</p>
+        <p><strong>Fecha salida:</strong> {{ reserva.fecha_check_out }}</p>
+        <p><strong>Huéspedes:</strong> {{ reserva.cantidad_huespedes }}</p>
+      </div>
+
+      <div>
+        <h3>Valores</h3>
+        <p><strong>Total:</strong> {{ reserva.total_reserva | clp }}</p>
+        <p>
+          <strong>Abono requerido:</strong> {{ reserva.abono_requerido | clp }}
+        </p>
+        <p>
+          <strong>Saldo pendiente:</strong> {{ reserva.saldo_pendiente | clp }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <a class="button" href="{{ url_for('disponibilidad') }}">
+      Realizar nueva reserva
+    </a>
+  </div>
+  {% endif %}
+</section>
+
+{% endblock %}
