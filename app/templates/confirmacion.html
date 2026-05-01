@@ -25,6 +25,17 @@ Pacific Reef{% endblock %} {% block content %}
       </div>
 
       <div>
+        <h3>Cliente asociado</h3>
+        <p>
+          <strong>Nombre:</strong>
+          {{ reserva.nombres_cliente }} {{ reserva.apellidos_cliente }}
+        </p>
+        <p><strong>Correo:</strong> {{ reserva.correo_cliente }}</p>
+        <p><strong>Teléfono:</strong> {{ reserva.telefono_cliente }}</p>
+        <p><strong>ID cliente:</strong> {{ reserva.id_cliente }}</p>
+      </div>
+
+      <div>
         <h3>Estadía</h3>
         <p><strong>Habitación:</strong> {{ reserva.numero_habitacion }}</p>
         <p><strong>Tipo:</strong> {{ reserva.tipo_habitacion }}</p>
@@ -49,6 +60,9 @@ Pacific Reef{% endblock %} {% block content %}
   <div class="actions">
     <a class="button" href="{{ url_for('disponibilidad') }}">
       Realizar nueva reserva
+    </a>
+    <a class="button secondary" href="{{ url_for('admin_reservas') }}">
+      Ver panel administrador
     </a>
   </div>
   {% endif %}

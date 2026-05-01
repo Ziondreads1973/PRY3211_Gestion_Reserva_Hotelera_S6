@@ -1,0 +1,47 @@
+ESTADO HITO 5 - SEMANA 8
+
+Proyecto:
+PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+
+Objetivo del hito:
+Mejorar la visualización front-end del cliente asociado a la reserva, mostrando los datos del cliente en la confirmación de reserva y en el panel administrador.
+
+Funcionalidad implementada:
+- Se agregó sección "Cliente asociado" en la pantalla de confirmación de reserva.
+- Se muestran nombre, correo, teléfono e ID cliente en la confirmación.
+- Se agregaron columnas de cliente, correo y teléfono en el panel administrador.
+- Se corrigió la redacción de la descripción del panel administrador.
+- Se dejó visible la relación entre reserva, habitación, montos calculados y cliente asociado.
+
+Archivos modificados:
+- app/templates/confirmacion.html
+- app/templates/admin_reservas.html
+
+Pruebas realizadas:
+- Se abrió la confirmación de la reserva id_reserva 7.
+- Se verificó que la reserva muestra el cliente real asociado.
+- Se abrió el panel administrador.
+- Se verificó que la tabla muestra datos del cliente junto con los datos de reserva.
+
+Resultado esperado:
+La reserva registrada desde el formulario queda visible con los datos del cliente asociado.
+
+Resultado observado:
+La reserva id_reserva 7 muestra:
+- Cliente: Cliente Hito 4
+- Correo: cliente.hito4@correo.cl
+- Teléfono: +56 9 4444 4444
+- ID cliente: 5
+
+Evidencias generadas:
+- evidencia_hito5_confirmacion_cliente_s8.png
+- evidencia_hito5_panel_admin_cliente_s8.png
+
+Observaciones:
+Esta mejora permite evidenciar desde la interfaz que la reserva ya no depende de un cliente fijo de prueba, sino que queda vinculada a un cliente real creado o reutilizado desde la base de datos.
+
+Pendientes:
+- Actualizar README con la mejora de cliente asociado.
+- Actualizar planilla de pruebas Semana 8.
+- Crear DOD Semana 8.
+- Crear Manual de Usuario Testing.

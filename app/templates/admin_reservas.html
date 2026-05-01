@@ -7,8 +7,12 @@ Reef{% endblock %} {% block content %}
   <p>
     Esta vista permite revisar las reservas registradas en la base de datos del
     sistema Hotel Pacific Reef. Corresponde a una funcionalidad administrativa
-    vista administrativa del prototipo funcional Semana 8, conectada a la base
-    de datos SQLite.
+    del prototipo funcional Semana 8, conectada a la base de datos SQLite.
+  </p>
+
+  <p class="note">
+    El panel muestra la reserva, la habitación asociada, los montos calculados y
+    los datos del cliente vinculado al registro.
   </p>
 
   {% if resumen %}
@@ -34,7 +38,7 @@ Reef{% endblock %} {% block content %}
     </div>
 
     <div class="metric-card">
-      <span class="metric-label">Monto total</span>
+      <span class="metric-label">Monto total histórico</span>
       <strong>{{ resumen.monto_total_reservas | clp }}</strong>
     </div>
   </div>
@@ -45,6 +49,9 @@ Reef{% endblock %} {% block content %}
         <tr>
           <th>ID</th>
           <th>Código</th>
+          <th>Cliente</th>
+          <th>Correo</th>
+          <th>Teléfono</th>
           <th>Habitación</th>
           <th>Tipo</th>
           <th>Entrada</th>
@@ -62,6 +69,9 @@ Reef{% endblock %} {% block content %}
         <tr>
           <td>{{ reserva.id_reserva }}</td>
           <td>{{ reserva.codigo_reserva }}</td>
+          <td>{{ reserva.nombres_cliente }} {{ reserva.apellidos_cliente }}</td>
+          <td>{{ reserva.correo_cliente }}</td>
+          <td>{{ reserva.telefono_cliente }}</td>
           <td>{{ reserva.numero_habitacion }}</td>
           <td>{{ reserva.tipo_habitacion }}</td>
           <td>{{ reserva.fecha_check_in }}</td>
