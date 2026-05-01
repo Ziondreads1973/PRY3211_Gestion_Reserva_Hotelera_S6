@@ -1,0 +1,39 @@
+ESTADO HITO 2 - SEMANA 8
+
+Proyecto:
+PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+
+Objetivo del hito:
+Integrar un servicio web externo al prototipo funcional Semana 8, permitiendo que la aplicación consuma datos externos y los utilice dentro de una vista del sistema.
+
+Servicio externo utilizado:
+Open-Meteo
+
+Funcionalidad implementada:
+Se agregó la vista /destino, que consulta información climática actual para Valparaíso, Chile, mediante el servicio externo Open-Meteo.
+
+Archivos modificados:
+- app/app.py
+- app/templates/base.html
+- app/templates/destino.html
+- app/static/css/styles.css
+- app/requirements.txt
+
+Pruebas realizadas:
+- Se verificó que la ruta /destino cargue correctamente.
+- Se comprobó que el sistema consume datos desde el servicio externo.
+- Se verificó que la información climática se muestre en la interfaz.
+- Se validó el manejo de errores en caso de que el servicio externo no responda.
+
+Evidencias generadas:
+- evidencia_hito2_menu_destino_s8.png
+- evidencia_hito2_clima_destino_s8.png
+- evidencia_hito2_servicio_externo_funcionando_s8.png
+
+Resultado:
+La integración con servicio web externo queda implementada y disponible en ambiente local de pruebas.
+
+Pendientes:
+- Agregar endpoints JSON para consumo externo de recursos internos del sistema.
+- Actualizar planilla de pruebas Semana 8.
+- Actualizar DOD Semana 8.

@@ -1,3 +1,4 @@
+import requests
 from datetime import datetime
 from uuid import uuid4
 
@@ -30,6 +31,65 @@ def clp(value):
     except (TypeError, ValueError):
         return "$0"
 
+
+def obtener_clima_destino():
+    """
+    Consume el servicio externo Open-Meteo para obtener el clima actual
+    del destino turístico asociado al Hotel Pacific Reef.
+
+    Esta función se usa como evidencia de integración con servicio web externo
+    para el release Semana 8.
+    """
+    url = "https://api.open-meteo.com/v1/forecast"
+
+    params = {
+        "latitude": -33.0472,
+        "longitude": -71.6127,
+        "current_weather": "true",
+        "timezone": "America/Santiago",
+    }
+
+    try:
+        response = requests.get(url, params=params, timeout=5)
+        response.raise_for_status()
+        data = response.json()
+
+        clima_actual = data.get("current_weather")
+
+        if not clima_actual:
+            return {
+                "ok": False,
+                "message": "El servicio externo respondió, pero no entregó datos de clima actual.",
+                "destino": "Valparaíso, Chile",
+            }
+
+        return {
+            "ok": True,
+            "message": "Consulta de clima obtenida correctamente desde servicio externo.",
+            "destino": "Valparaíso, Chile",
+            "temperatura": clima_actual.get("temperature"),
+            "velocidad_viento": clima_actual.get("windspeed"),
+            "direccion_viento": clima_actual.get("winddirection"),
+            "codigo_clima": clima_actual.get("weathercode"),
+            "fecha_hora": clima_actual.get("time"),
+            "fuente": "Open-Meteo",
+        }
+
+    except requests.exceptions.Timeout:
+        return {
+            "ok": False,
+            "message": "El servicio externo no respondió dentro del tiempo máximo definido.",
+            "destino": "Valparaíso, Chile",
+            "fuente": "Open-Meteo",
+        }
+
+    except requests.exceptions.RequestException as error:
+        return {
+            "ok": False,
+            "message": f"No fue posible consultar el servicio externo: {error}",
+            "destino": "Valparaíso, Chile",
+            "fuente": "Open-Meteo",
+        }
 
 def parse_date(value):
     """
@@ -172,6 +232,11 @@ def disponibilidad():
         )
 
     return render_template("disponibilidad.html", values={})
+
+@app.route("/destino")
+def destino():
+    clima = obtener_clima_destino()
+    return render_template("destino.html", clima=clima)
 
 
 @app.route("/reservar/<int:id_habitacion>", methods=["GET", "POST"])

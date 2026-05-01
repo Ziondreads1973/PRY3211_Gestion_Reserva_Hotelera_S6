@@ -1,0 +1,62 @@
+{% extends "base.html" %} {% block title %}Información del destino | Hotel
+Pacific Reef{% endblock %} {% block content %}
+
+<section class="card">
+  <h2>Información del destino</h2>
+
+  <p>
+    Esta vista consume un servicio web externo para mostrar información
+    climática del destino turístico asociado al Hotel Pacific Reef. La
+    integración permite complementar el sistema de reservas con información útil
+    para el huésped.
+  </p>
+</section>
+
+<section class="card">
+  <h2>Clima actual</h2>
+
+  {% if clima.ok %}
+  <p class="success">{{ clima.message }}</p>
+
+  <div class="detail-grid">
+    <p><strong>Destino:</strong> {{ clima.destino }}</p>
+    <p><strong>Temperatura:</strong> {{ clima.temperatura }} °C</p>
+    <p>
+      <strong>Velocidad del viento:</strong> {{ clima.velocidad_viento }} km/h
+    </p>
+    <p><strong>Dirección del viento:</strong> {{ clima.direccion_viento }}°</p>
+    <p><strong>Código climático:</strong> {{ clima.codigo_clima }}</p>
+    <p><strong>Fecha y hora:</strong> {{ clima.fecha_hora }}</p>
+    <p><strong>Fuente:</strong> {{ clima.fuente }}</p>
+  </div>
+
+  {% else %}
+  <p class="error">{{ clima.message }}</p>
+
+  <div class="detail-grid">
+    <p><strong>Destino:</strong> {{ clima.destino }}</p>
+    <p><strong>Fuente:</strong> {{ clima.fuente }}</p>
+  </div>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Valor para el usuario</h2>
+
+  <p>
+    La información climática permite que el huésped revise condiciones generales
+    del destino antes de realizar o confirmar una reserva, mejorando la
+    experiencia de uso del sistema.
+  </p>
+
+  <div class="actions">
+    <a class="button" href="{{ url_for('disponibilidad') }}">
+      Consultar disponibilidad
+    </a>
+    <a class="button secondary" href="{{ url_for('index') }}">
+      Volver al inicio
+    </a>
+  </div>
+</section>
+
+{% endblock %}
