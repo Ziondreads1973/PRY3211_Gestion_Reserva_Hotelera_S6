@@ -2,10 +2,11 @@ import requests
 from datetime import datetime
 from uuid import uuid4
 
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, jsonify, redirect, render_template, request, url_for
 
 from database import (
     buscar_habitaciones_disponibles,
+    buscar_o_crear_cliente,
     crear_reserva,
     listar_reservas_admin,
     obtener_habitacion_por_id,
@@ -30,6 +31,23 @@ def clp(value):
         return f"${number:,}".replace(",", ".")
     except (TypeError, ValueError):
         return "$0"
+
+
+def serializar_filas(filas):
+    """
+    Convierte filas sqlite3.Row o diccionarios en una lista de diccionarios
+    compatible con respuestas JSON.
+    """
+    resultado = []
+
+    for fila in filas:
+        if isinstance(fila, dict):
+            resultado.append(fila)
+        else:
+            resultado.append(dict(fila))
+
+    return resultado
+
 
 def traducir_codigo_clima(codigo):
     """
@@ -145,6 +163,7 @@ def obtener_clima_destino():
             "fuente": "Open-Meteo",
         }
 
+
 def parse_date(value):
     """
     Convierte una fecha HTML yyyy-mm-dd a objeto date.
@@ -197,7 +216,7 @@ def calcular_montos(precio_noche, cantidad_noches):
 
 def generar_codigo_reserva():
     """
-    Genera un código simple para identificar la reserva en el MVP.
+    Genera un código simple para identificar la reserva.
     """
     fecha = datetime.now().strftime("%Y%m%d")
     sufijo = uuid4().hex[:6].upper()
@@ -286,6 +305,7 @@ def disponibilidad():
         )
 
     return render_template("disponibilidad.html", values={})
+
 
 @app.route("/destino")
 def destino():
@@ -434,13 +454,28 @@ def reservar(id_habitacion):
 
     codigo_reserva = generar_codigo_reserva()
 
-    # Release Semana 8:
-    # En esta versión se mantiene temporalmente un cliente de prueba para asociar la reserva.
-    # Esta lógica será mejorada en el siguiente hito para registrar o reutilizar clientes reales.
-    id_cliente_demo = 1
+    try:
+        id_cliente = buscar_o_crear_cliente(
+            nombre_contacto=nombre_contacto,
+            correo_contacto=correo_contacto,
+            telefono_contacto=telefono_contacto,
+        )
+    except Exception as error:
+        return render_template(
+            "reserva.html",
+            error=f"No fue posible registrar o reutilizar el cliente: {error}",
+            habitacion=habitacion,
+            fecha_check_in=fecha_check_in.isoformat(),
+            fecha_check_out=fecha_check_out.isoformat(),
+            cantidad_huespedes=cantidad_huespedes,
+            cantidad_noches=cantidad_noches,
+            total_reserva=total_reserva,
+            abono_requerido=abono_requerido,
+            saldo_pendiente=saldo_pendiente,
+        )
 
     id_reserva = crear_reserva(
-        id_cliente=id_cliente_demo,
+        id_cliente=id_cliente,
         id_habitacion=id_habitacion,
         fecha_check_in=fecha_check_in.isoformat(),
         fecha_check_out=fecha_check_out.isoformat(),
@@ -470,6 +505,7 @@ def confirmacion(id_reserva):
 
     return render_template("confirmacion.html", reserva=reserva)
 
+
 @app.route("/admin/reservas")
 def admin_reservas():
     """
@@ -486,6 +522,7 @@ def admin_reservas():
         resumen=resumen,
     )
 
+
 @app.route("/health-db")
 def health_db():
     """
@@ -494,6 +531,121 @@ def health_db():
     """
     status = test_db_connection()
     return render_template("index.html", db_status=status)
+
+
+@app.route("/api/health")
+def api_health():
+    """
+    Endpoint JSON para verificar el estado de la aplicación y la conexión
+    con la base de datos.
+    """
+    status = test_db_connection()
+    http_status = 200 if status.get("ok") else 500
+
+    return jsonify(
+        {
+            "ok": status.get("ok"),
+            "message": status.get("message"),
+            "database": status.get("database"),
+            "tables": status.get("tables", []),
+        }
+    ), http_status
+
+
+@app.route("/api/reservas")
+def api_reservas():
+    """
+    Endpoint JSON que expone las reservas registradas en el sistema.
+    Permite que otra aplicación consulte el estado administrativo de reservas.
+    """
+    try:
+        reservas = listar_reservas_admin()
+
+        return jsonify(
+            {
+                "ok": True,
+                "cantidad": len(reservas),
+                "reservas": serializar_filas(reservas),
+            }
+        )
+
+    except Exception as error:
+        return jsonify(
+            {
+                "ok": False,
+                "message": f"No fue posible obtener las reservas: {error}",
+            }
+        ), 500
+
+
+@app.route("/api/disponibilidad")
+def api_disponibilidad():
+    """
+    Endpoint JSON para consultar habitaciones disponibles.
+    Recibe parámetros por query string:
+    - fecha_check_in
+    - fecha_check_out
+    - cantidad_huespedes
+    """
+    fecha_check_in_raw = request.args.get("fecha_check_in", "").strip()
+    fecha_check_out_raw = request.args.get("fecha_check_out", "").strip()
+    cantidad_raw = request.args.get("cantidad_huespedes", "").strip()
+
+    (
+        fecha_check_in,
+        fecha_check_out,
+        cantidad_huespedes,
+        error,
+    ) = validar_datos_busqueda(
+        fecha_check_in_raw,
+        fecha_check_out_raw,
+        cantidad_raw,
+    )
+
+    if error:
+        return jsonify(
+            {
+                "ok": False,
+                "message": error,
+                "parametros_recibidos": {
+                    "fecha_check_in": fecha_check_in_raw,
+                    "fecha_check_out": fecha_check_out_raw,
+                    "cantidad_huespedes": cantidad_raw,
+                },
+            }
+        ), 400
+
+    habitaciones = buscar_habitaciones_disponibles(
+        fecha_check_in.isoformat(),
+        fecha_check_out.isoformat(),
+        cantidad_huespedes,
+    )
+
+    return jsonify(
+        {
+            "ok": True,
+            "message": "Consulta de disponibilidad ejecutada correctamente.",
+            "parametros": {
+                "fecha_check_in": fecha_check_in.isoformat(),
+                "fecha_check_out": fecha_check_out.isoformat(),
+                "cantidad_huespedes": cantidad_huespedes,
+            },
+            "cantidad_resultados": len(habitaciones),
+            "habitaciones": serializar_filas(habitaciones),
+        }
+    )
+
+
+@app.route("/api/clima-destino")
+def api_clima_destino():
+    """
+    Endpoint JSON que expone la información climática del destino.
+    Reutiliza la integración con el servicio externo Open-Meteo.
+    """
+    clima = obtener_clima_destino()
+    http_status = 200 if clima.get("ok") else 503
+
+    return jsonify(clima), http_status
 
 
 if __name__ == "__main__":

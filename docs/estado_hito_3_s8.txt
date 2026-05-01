@@ -1,0 +1,48 @@
+ESTADO HITO 3 - SEMANA 8
+
+Proyecto:
+PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+
+Objetivo del hito:
+Agregar endpoints JSON que permitan exponer recursos internos del sistema para ser consumidos por otras aplicaciones o clientes externos.
+
+Endpoints implementados:
+- /api/health
+- /api/reservas
+- /api/disponibilidad
+- /api/clima-destino
+
+Funcionalidad implementada:
+- /api/health permite verificar el estado de la aplicación y conexión con base de datos.
+- /api/reservas permite consultar reservas registradas.
+- /api/disponibilidad permite consultar habitaciones disponibles mediante parámetros.
+- /api/clima-destino permite obtener en formato JSON la información climática del destino, reutilizando el servicio externo Open-Meteo.
+
+Pruebas realizadas:
+- Se verificó respuesta JSON de estado de base de datos.
+- Se verificó listado JSON de reservas.
+- Se verificó consulta de disponibilidad con parámetros válidos.
+- Se verificó respuesta de error con fechas inválidas.
+- Se verificó respuesta JSON del clima del destino.
+
+Evidencias generadas:
+- evidencia_hito3_api_health_s8.png
+- evidencia_hito3_api_reservas_s8.png
+- evidencia_hito3_api_disponibilidad_s8.png
+- evidencia_hito3_api_disponibilidad_error_s8.png
+- evidencia_hito3_api_clima_destino_s8.png
+
+Observaciones:
+- El endpoint /api/reservas expone correctamente los datos almacenados en SQLite.
+- Se identifican reservas antiguas de prueba con inconsistencias en saldo_pendiente, heredadas desde datos iniciales.
+- Las reservas generadas desde la aplicación actual calculan correctamente total_reserva, abono_requerido y saldo_pendiente.
+- El endpoint /api/clima-destino requiere conexión a internet porque reutiliza el servicio externo Open-Meteo.
+
+Resultado:
+El sistema queda preparado para entregar recursos en formato JSON, permitiendo que otras aplicaciones puedan consultar información básica del prototipo funcional.
+
+Pendientes:
+- Mejorar registro de cliente/reserva.
+- Actualizar planilla de pruebas Semana 8.
+- Crear DOD Semana 8.
+- Crear Manual de Usuario Testing.

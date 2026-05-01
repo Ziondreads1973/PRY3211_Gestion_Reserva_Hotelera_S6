@@ -6,9 +6,9 @@ Proyecto desarrollado para la asignatura **PRY3211 - Ingeniería de Software**.
 
 Este repositorio contiene el **release funcional de Semana 8** del Sistema de Gestión de Reserva Hotelera para **Hotel Pacific Reef**.
 
-El proyecto se basa en el MVP funcional construido en Semana 7 y tiene como objetivo demostrar la integración entre **front-end, back-end y base de datos SQLite** en un ambiente de prueba.
+El proyecto se basa en el MVP funcional construido en Semana 7 y tiene como objetivo demostrar la integración entre **front-end, back-end, base de datos SQLite, servicio web externo y endpoints JSON** en un ambiente de prueba.
 
-Actualmente, el sistema permite consultar disponibilidad de habitaciones, registrar reservas desde la interfaz web, calcular automáticamente los montos asociados a la reserva y visualizar las reservas registradas desde un panel administrador.
+Actualmente, el sistema permite consultar disponibilidad de habitaciones, registrar reservas desde la interfaz web, calcular automáticamente los montos asociados a la reserva, visualizar las reservas registradas desde un panel administrador, consultar información climática del destino mediante un servicio web externo y exponer recursos del sistema mediante endpoints JSON.
 
 ## Tecnologías utilizadas
 
@@ -18,6 +18,8 @@ Actualmente, el sistema permite consultar disponibilidad de habitaciones, regist
 - HTML
 - CSS
 - Jinja Templates
+- API REST externa Open-Meteo
+- Endpoints JSON propios desarrollados con Flask
 
 ## Funcionalidades implementadas
 
@@ -34,11 +36,12 @@ Actualmente, el sistema permite consultar disponibilidad de habitaciones, regist
 - Panel administrador para visualizar reservas registradas.
 - Verificación de conexión con la base de datos mediante ruta de salud.
 - Integración funcional entre interfaz, lógica back-end y base de datos SQLite.
+- Integración con servicio web externo para consultar el clima del destino.
+- Visualización de temperatura, viento, condición climática, código climático, fecha/hora y fuente de datos.
+- Disponibilización de endpoints JSON para que otras aplicaciones puedan consultar recursos básicos del sistema.
 
-## Funcionalidades planificadas para Semana 8
+## Funcionalidades pendientes para Semana 8
 
-- Integración con servicio web externo.
-- Disponibilización de endpoints JSON para consumo de recursos por otras aplicaciones.
 - Mejoras en el registro de cliente asociado a la reserva.
 - Actualización de planilla de pruebas Semana 8.
 - Actualización de DOD Semana 8.

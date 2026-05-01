@@ -1,0 +1,62 @@
+ESTADO HITO 4 - SEMANA 8
+
+Proyecto:
+PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+
+Objetivo del hito:
+Mejorar el registro de reserva para que los datos de contacto ingresados desde la interfaz se utilicen en la base de datos, eliminando la dependencia de un cliente fijo de prueba.
+
+Funcionalidad implementada:
+- Se incorporó lógica para buscar usuario por correo electrónico.
+- Si el usuario existe, se reutiliza su cliente asociado.
+- Si el usuario no existe, se crea un nuevo usuario con rol cliente.
+- Si el cliente asociado no existe, se crea un nuevo registro en tabla cliente.
+- La reserva queda asociada al id_cliente real.
+- Se eliminó el uso de id_cliente_demo = 1 en el flujo de reserva.
+
+Archivos modificados:
+- app/database.py
+- app/app.py
+- app/templates/reserva.html
+
+Pruebas realizadas:
+- Se validó sintaxis de database.py.
+- Se validó sintaxis de app.py.
+- Se ejecutó buscar_o_crear_cliente con datos de prueba.
+- Se registró una reserva desde la interfaz usando el correo cliente.hito4@correo.cl.
+- Se verificó en SQLite la creación/reutilización del cliente.
+- Se verificó que la reserva id_reserva 7 quedó asociada a id_cliente 5.
+- Se comprobó que total_reserva, abono_requerido y saldo_pendiente se calcularon correctamente.
+
+Resultado de prueba:
+Cliente creado/reutilizado:
+id_cliente = 5
+id_usuario = 7
+correo = cliente.hito4@correo.cl
+
+Reserva registrada:
+id_reserva = 7
+id_cliente = 5
+id_habitacion = 201
+fecha_check_in = 2026-05-20
+fecha_check_out = 2026-05-22
+total_reserva = 180000
+abono_requerido = 54000
+saldo_pendiente = 126000
+
+Evidencias generadas:
+- evidencia_hito4_formulario_reserva_cliente_s8.png
+- evidencia_hito4_confirmacion_reserva_cliente_s8.png
+- evidencia_hito4_cliente_creado_sqlite_s8.png
+- evidencia_hito4_reserva_cliente_real_s8.png
+
+Observaciones:
+- La tabla usuario exige RUT como dato obligatorio. Como el formulario de reserva no solicita RUT, se genera un RUT temporal controlado para usuarios creados desde este MVP.
+- Esta solución es válida para ambiente de pruebas académico. En una versión productiva debería incorporarse validación formal de identidad/RUT.
+- Se mantienen reservas antiguas de prueba con inconsistencias de saldo_pendiente, pero las reservas generadas desde la app actual calculan correctamente los montos.
+
+Pendientes:
+- Actualizar README con esta mejora.
+- Actualizar planilla de pruebas Semana 8.
+- Actualizar DOD Semana 8.
+- Crear Manual de Usuario Testing.

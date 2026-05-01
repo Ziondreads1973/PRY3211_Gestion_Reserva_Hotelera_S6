@@ -52,6 +52,240 @@ def test_db_connection():
         }
 
 
+def normalizar_correo(correo):
+    """
+    Normaliza correos para búsquedas consistentes.
+    """
+    return correo.strip().lower()
+
+
+def separar_nombre_apellido(nombre_contacto):
+    """
+    Separa un nombre completo en nombres y apellidos.
+    Si el usuario ingresa solo una palabra, se asigna apellido 'Sin apellido'.
+    """
+    partes = nombre_contacto.strip().split()
+
+    if not partes:
+        return "Cliente", "Sin apellido"
+
+    if len(partes) == 1:
+        return partes[0], "Sin apellido"
+
+    nombres = partes[0]
+    apellidos = " ".join(partes[1:])
+
+    return nombres, apellidos
+
+
+def generar_rut_temporal_cliente():
+    """
+    Genera un RUT temporal para usuarios creados desde el formulario del MVP.
+
+    La tabla usuario exige RUT como dato obligatorio. Como el formulario de reserva
+    no solicita RUT, se genera un valor temporal controlado para mantener la
+    integridad de la base de datos en ambiente de pruebas.
+    """
+    connection = get_db_connection()
+
+    row = connection.execute(
+        """
+        SELECT COALESCE(MAX(id_usuario), 0) + 1 AS siguiente_id
+        FROM usuario;
+        """
+    ).fetchone()
+
+    connection.close()
+
+    siguiente_id = int(row["siguiente_id"])
+    return f"9000{siguiente_id:04d}-{siguiente_id % 10}"
+
+
+def obtener_id_rol_cliente(connection):
+    """
+    Obtiene el id_rol correspondiente a cliente.
+
+    En los datos actuales del proyecto, los clientes usan id_rol = 1.
+    Se intenta confirmar por nombre de rol si la tabla lo permite; si no,
+    se usa 1 como valor por defecto controlado.
+    """
+    try:
+        columnas_rol = connection.execute("PRAGMA table_info(rol);").fetchall()
+        nombres_columnas = [columna["name"] for columna in columnas_rol]
+
+        columna_nombre = None
+        for candidata in ["nombre", "nombre_rol", "descripcion"]:
+            if candidata in nombres_columnas:
+                columna_nombre = candidata
+                break
+
+        if columna_nombre:
+            row = connection.execute(
+                f"""
+                SELECT id_rol
+                FROM rol
+                WHERE LOWER(TRIM({columna_nombre})) LIKE '%cliente%'
+                   OR LOWER(TRIM({columna_nombre})) LIKE '%turista%'
+                LIMIT 1;
+                """
+            ).fetchone()
+
+            if row:
+                return row["id_rol"]
+
+    except Exception:
+        pass
+
+    return 1
+
+
+def buscar_usuario_por_correo(connection, correo_contacto):
+    """
+    Busca un usuario activo o existente por correo electrónico.
+    """
+    correo = normalizar_correo(correo_contacto)
+
+    return connection.execute(
+        """
+        SELECT *
+        FROM usuario
+        WHERE LOWER(TRIM(correo)) = ?
+        LIMIT 1;
+        """,
+        (correo,),
+    ).fetchone()
+
+
+def crear_usuario_cliente(connection, nombre_contacto, correo_contacto, telefono_contacto):
+    """
+    Crea un usuario con rol cliente usando los datos ingresados en el formulario.
+    """
+    nombres, apellidos = separar_nombre_apellido(nombre_contacto)
+    correo = normalizar_correo(correo_contacto)
+    rut_temporal = generar_rut_temporal_cliente()
+    id_rol_cliente = obtener_id_rol_cliente(connection)
+
+    cursor = connection.execute(
+        """
+        INSERT INTO usuario (
+            id_rol,
+            rut,
+            nombres,
+            apellidos,
+            correo,
+            contrasena,
+            telefono,
+            idioma,
+            estado
+        )
+        VALUES (
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            ?,
+            'ES',
+            'Activo'
+        );
+        """,
+        (
+            id_rol_cliente,
+            rut_temporal,
+            nombres,
+            apellidos,
+            correo,
+            "Cliente1234",
+            telefono_contacto,
+        ),
+    )
+
+    return cursor.lastrowid
+
+
+def buscar_cliente_por_id_usuario(connection, id_usuario):
+    """
+    Busca un cliente asociado a un usuario.
+    """
+    return connection.execute(
+        """
+        SELECT *
+        FROM cliente
+        WHERE id_usuario = ?
+        LIMIT 1;
+        """,
+        (id_usuario,),
+    ).fetchone()
+
+
+def crear_cliente_para_usuario(connection, id_usuario):
+    """
+    Crea un cliente asociado a un usuario existente.
+    """
+    cursor = connection.execute(
+        """
+        INSERT INTO cliente (
+            id_usuario,
+            fecha_registro,
+            estado_cliente
+        )
+        VALUES (
+            ?,
+            DATE('now'),
+            'Activo'
+        );
+        """,
+        (id_usuario,),
+    )
+
+    return cursor.lastrowid
+
+
+def buscar_o_crear_cliente(nombre_contacto, correo_contacto, telefono_contacto):
+    """
+    Busca o crea un cliente a partir de los datos ingresados en el formulario.
+
+    Flujo:
+    - Busca usuario por correo.
+    - Si no existe, crea usuario con rol cliente.
+    - Busca cliente asociado al usuario.
+    - Si no existe cliente, crea registro en tabla cliente.
+    - Retorna id_cliente para asociarlo a la reserva.
+    """
+    connection = get_db_connection()
+
+    try:
+        usuario = buscar_usuario_por_correo(connection, correo_contacto)
+
+        if usuario:
+            id_usuario = usuario["id_usuario"]
+        else:
+            id_usuario = crear_usuario_cliente(
+                connection,
+                nombre_contacto,
+                correo_contacto,
+                telefono_contacto,
+            )
+
+        cliente = buscar_cliente_por_id_usuario(connection, id_usuario)
+
+        if cliente:
+            id_cliente = cliente["id_cliente"]
+        else:
+            id_cliente = crear_cliente_para_usuario(connection, id_usuario)
+
+        connection.commit()
+        return id_cliente
+
+    except Exception:
+        connection.rollback()
+        raise
+
+    finally:
+        connection.close()
+
+
 def buscar_habitaciones_disponibles(
     fecha_check_in,
     fecha_check_out,
@@ -182,8 +416,8 @@ def crear_reserva(
     codigo_reserva,
 ):
     """
-    Registra una nueva reserva en la base de datos SQLite.
-    Para el MVP se utiliza un cliente de prueba previamente existente.
+    Registra una nueva reserva en la base de datos SQLite,
+    asociándola al cliente recibido como parámetro.
     """
     connection = get_db_connection()
 
@@ -240,7 +474,7 @@ def crear_reserva(
 
 def obtener_reserva_por_id(id_reserva):
     """
-    Obtiene una reserva registrada, junto con la habitación y tipo asociado.
+    Obtiene una reserva registrada, junto con la habitación, tipo y cliente asociado.
     """
     connection = get_db_connection()
 
@@ -260,12 +494,20 @@ def obtener_reserva_por_id(id_reserva):
             r.codigo_reserva,
             h.numero AS numero_habitacion,
             h.piso,
-            th.nombre AS tipo_habitacion
+            th.nombre AS tipo_habitacion,
+            u.nombres AS nombres_cliente,
+            u.apellidos AS apellidos_cliente,
+            u.correo AS correo_cliente,
+            u.telefono AS telefono_cliente
         FROM reserva r
         INNER JOIN habitacion h
             ON r.id_habitacion = h.id_habitacion
         INNER JOIN tipo_habitacion th
             ON h.id_tipo_habitacion = th.id_tipo_habitacion
+        INNER JOIN cliente c
+            ON r.id_cliente = c.id_cliente
+        INNER JOIN usuario u
+            ON c.id_usuario = u.id_usuario
         WHERE r.id_reserva = ?;
     """
 
@@ -274,10 +516,11 @@ def obtener_reserva_por_id(id_reserva):
 
     return reserva
 
+
 def listar_reservas_admin():
     """
-    Lista las reservas registradas para la vista administrativa del MVP.
-    Se muestran datos principales de la reserva, habitación y tipo de habitación.
+    Lista las reservas registradas para la vista administrativa del release Semana 8.
+    Se muestran datos principales de la reserva, habitación, tipo de habitación y cliente.
     """
     connection = get_db_connection()
 
@@ -297,12 +540,20 @@ def listar_reservas_admin():
             r.codigo_reserva,
             h.numero AS numero_habitacion,
             h.piso,
-            th.nombre AS tipo_habitacion
+            th.nombre AS tipo_habitacion,
+            u.nombres AS nombres_cliente,
+            u.apellidos AS apellidos_cliente,
+            u.correo AS correo_cliente,
+            u.telefono AS telefono_cliente
         FROM reserva r
         INNER JOIN habitacion h
             ON r.id_habitacion = h.id_habitacion
         INNER JOIN tipo_habitacion th
             ON h.id_tipo_habitacion = th.id_tipo_habitacion
+        INNER JOIN cliente c
+            ON r.id_cliente = c.id_cliente
+        INNER JOIN usuario u
+            ON c.id_usuario = u.id_usuario
         ORDER BY
             r.id_reserva DESC;
     """
