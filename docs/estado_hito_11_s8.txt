@@ -1,0 +1,30 @@
+ESTADO HITO 11 - SEMANA 8
+
+Proyecto:
+PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+
+Objetivo del hito:
+Preparar y grabar el video demostrativo funcional del release Semana 8, mostrando la ejecución del sistema y sus principales integraciones.
+
+Contenido demostrado:
+- Ejecución de la aplicación Flask en ambiente local.
+- Página principal del sistema.
+- Consulta de disponibilidad.
+- Registro de reserva.
+- Creación o reutilización de cliente por correo.
+- Confirmación con cliente asociado.
+- Panel administrador con datos de cliente.
+- Integración con servicio externo Open-Meteo.
+- Endpoints JSON del sistema.
+
+Archivo generado:
+videos/video_demostrativo_funcional_s8.mp4
+
+Evidencia:
+evidencias/semana8/videos/evidencia_hito11_video_demostrativo_s8.png
+
+Observaciones:
+El video demuestra el funcionamiento del sistema en ambiente local de pruebas. La integración con Open-Meteo requiere conexión a internet.
+
+Estado:
+Completado / pendiente de carga de enlace final.

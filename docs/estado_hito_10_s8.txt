@@ -1,0 +1,20 @@
+ESTADO HITO 10 - SEMANA 8
+
+Estado:
+En proceso.
+
+Avances realizados:
+- Se creó la lista SEMANA 8 - RELEASE FUNCIONAL en Trello.
+- Se crearon tarjetas para los hitos Semana 8.
+- Se agregaron descripciones a las tarjetas principales.
+- Se creó la tarjeta S8 - Enlaces finales de entrega.
+- Se eliminó o corrigió la referencia antigua asociada a Semana 6.
+- Se exportó JSON preliminar actualizado del tablero.
+
+Pendientes:
+- Incorporar link final del repositorio GitHub.
+- Incorporar links finales de videos.
+- Adjuntar evidencias finales si corresponde.
+- Tomar capturas definitivas del tablero Trello.
+- Exportar JSON final definitivo.
+- Actualizar enlaces_entrega_s8.txt.
