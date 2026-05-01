@@ -1,0 +1,38 @@
+ESTADO HITO 1 - SEMANA 8
+
+Proyecto:
+PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+
+Objetivo del hito:
+Auditar el MVP heredado de Semana 7, verificar su funcionamiento en ambiente de prueba y actualizar la identificación visual/documental del proyecto al release Semana 8.
+
+Pruebas realizadas:
+- Se ejecutó la aplicación Flask en ambiente local.
+- Se verificó la carga de la página principal.
+- Se verificó la conexión con la base de datos mediante la ruta /health-db.
+- Se ejecutó consulta de disponibilidad con fechas válidas.
+- Se registró una reserva de prueba desde la interfaz.
+- Se verificó la confirmación de reserva.
+- Se revisó la aparición de la reserva en el panel administrador.
+- Se validó la inserción de la reserva en SQLite mediante consulta directa.
+
+Evidencias generadas:
+- evidencia_hito1_inicio_s8.png
+- evidencia_hito1_health_db_s8.png
+- evidencia_hito1_consulta_disponibilidad_s8.png
+- evidencia_hito1_formulario_reserva_s8.png
+- evidencia_hito1_confirmacion_reserva_s8.png
+- evidencia_hito1_panel_admin_s8.png
+- evidencia_hito1_reserva_insertada_sqlite_s8.png
+
+Observaciones:
+- La reserva generada desde la aplicación calcula correctamente total, abono requerido y saldo pendiente.
+- Se detectaron reservas antiguas de prueba con inconsistencias en saldo_pendiente. Estas inconsistencias corresponden a datos heredados y no a la lógica actual del sistema.
+
+Pendientes para siguientes hitos:
+- Integrar servicio web externo.
+- Agregar endpoints JSON para consumo externo.
+- Mejorar el registro de cliente/reserva.
+- Actualizar planilla de pruebas Semana 8.
+- Crear DOD Semana 8.
+- Crear Manual de Usuario Testing.

@@ -1,0 +1,32 @@
+# Entornos virtuales
+venv/
+app/venv/
+.env
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Flask
+instance/
+*.log
+
+# VS Code
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+~$*
+*.tmp
+*.bak
+
+# Comprimidos generados
+*.zip
+*.rar

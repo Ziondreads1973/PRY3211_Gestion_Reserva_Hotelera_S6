@@ -2,12 +2,19 @@
 endblock %} {% block content %}
 
 <section class="card">
-  <h2>Prototipo funcional MVP</h2>
+  <h2>Release Semana 8 · Prototipo funcional integrado</h2>
 
   <p>
-    Este prototipo corresponde al avance funcional de Semana 7 del sistema Hotel
-    Pacific Reef. Su objetivo es demostrar la integración inicial entre
-    front-end, back-end y base de datos en un ambiente de prueba.
+    Este prototipo corresponde al release funcional de Semana 8 del sistema
+    Hotel Pacific Reef. El proyecto se basa en el MVP construido en Semana 7 y
+    actualmente permite demostrar la integración entre front-end, back-end y
+    base de datos SQLite en un ambiente local de pruebas.
+  </p>
+
+  <p>
+    El flujo principal permite consultar disponibilidad de habitaciones,
+    registrar una reserva, calcular automáticamente los montos asociados y
+    visualizar las reservas registradas desde un panel administrador.
   </p>
 
   <div class="actions">
@@ -18,15 +25,37 @@ endblock %} {% block content %}
 </section>
 
 <section class="card">
-  <h2>Alcance del MVP</h2>
+  <h2>Funcionalidades disponibles</h2>
 
   <ul>
     <li>Consulta de disponibilidad de habitaciones.</li>
-    <li>Listado de habitaciones disponibles.</li>
-    <li>Registro básico de reserva.</li>
-    <li>Cálculo de abono del 30%.</li>
-    <li>Vista administrativa simple de reservas.</li>
+    <li>Validación de fechas de entrada y salida.</li>
+    <li>Listado de habitaciones disponibles según capacidad.</li>
+    <li>Registro básico de reserva desde interfaz web.</li>
+    <li>Cálculo automático del total de reserva.</li>
+    <li>Cálculo automático de abono requerido del 30%.</li>
+    <li>Cálculo automático del saldo pendiente.</li>
+    <li>Confirmación de reserva con código generado.</li>
+    <li>Panel administrador para visualizar reservas registradas.</li>
+    <li>Verificación de conexión con base de datos SQLite.</li>
   </ul>
+</section>
+
+<section class="card">
+  <h2>Estado del release</h2>
+
+  <p>
+    El sistema se encuentra en ambiente de prueba local. Durante Semana 8 se
+    continuará con la incorporación de mejoras funcionales, pruebas
+    documentadas, actualización del DOD, Manual de Usuario Testing y evidencias
+    del sprint.
+  </p>
+
+  <p>
+    Las próximas mejoras planificadas consideran la integración con un servicio
+    web externo y la disponibilidad de recursos mediante endpoints JSON para
+    consumo por otras aplicaciones.
+  </p>
 </section>
 
 {% if db_status %}

@@ -315,8 +315,9 @@ def reservar(id_habitacion):
 
     codigo_reserva = generar_codigo_reserva()
 
-    # MVP Semana 7:
-    # Se utiliza un cliente de prueba existente para evitar implementar login/registro.
+    # Release Semana 8:
+    # En esta versión se mantiene temporalmente un cliente de prueba para asociar la reserva.
+    # Esta lógica será mejorada en el siguiente hito para registrar o reutilizar clientes reales.
     id_cliente_demo = 1
 
     id_reserva = crear_reserva(
