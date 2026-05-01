@@ -1,0 +1,55 @@
+ESTADO HITO 8 - SEMANA 8
+
+Proyecto:
+PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+
+Objetivo del hito:
+Actualizar el Definition of Done del release Semana 8, incorporando los criterios de completitud asociados al MVP funcional, base de datos SQLite, servicio web externo, endpoints JSON, cliente asociado a reserva, evidencias, testing y cierre documental.
+
+Archivo generado:
+dod/PRY3211_Exp3_S8_DOD_Hotel_Pacific_Reef.xlsx
+
+Contenido:
+- Hoja DOD Semana 8.
+- Hoja Evidencias S8.
+- Hoja Fuentes.
+
+Resultado actual:
+- Total criterios: 26.
+- Puntaje obtenido: 65.
+- Puntaje máximo: 78.
+- Cumplimiento observado: 83%.
+
+Criterios completados:
+- Aplicación Flask funcional.
+- Conexión SQLite.
+- Consulta de disponibilidad.
+- Validación de fechas.
+- Registro de reserva.
+- Creación o reutilización de cliente por correo.
+- Reserva asociada a id_cliente real.
+- Confirmación con cliente asociado.
+- Panel administrador con cliente, correo y teléfono.
+- Integración con Open-Meteo.
+- Endpoints JSON.
+- README e inventario funcional.
+- Planilla de pruebas Semana 8.
+
+Criterios pendientes o por validar:
+- Manual de Usuario Testing.
+- GitHub final.
+- Trello final.
+- Videos finales.
+- ZIP final limpio.
+
+Observaciones:
+- No se marcaron como completadas actividades que aún no están cerradas.
+- Se mantiene observación sobre reservas antiguas de prueba con inconsistencias en saldo_pendiente.
+- Las reservas generadas desde la aplicación actual calculan correctamente total_reserva, abono_requerido y saldo_pendiente.
+
+Pendientes:
+- Crear Manual de Usuario Testing.
+- Actualizar Trello.
+- Verificar GitHub.
+- Grabar videos finales.
+- Preparar ZIP final limpio.
