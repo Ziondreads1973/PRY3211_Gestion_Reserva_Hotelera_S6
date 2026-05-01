@@ -1,0 +1,44 @@
+ESTADO HITO 7 - SEMANA 8
+
+Proyecto:
+PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+
+Objetivo del hito:
+Actualizar la planilla de pruebas del proyecto para el release funcional Semana 8, incorporando los casos de prueba correspondientes al MVP actualizado, integración con base de datos, servicio web externo, endpoints JSON, cliente asociado a reserva y evidencias de cierre.
+
+Archivo generado:
+testing/PRY3211_Exp3_S8_Planilla_Testing_Hotel_Pacific_Reef.xlsx
+
+Contenido de la planilla:
+- Hoja Resumen S8.
+- Hoja Casos de Prueba S8.
+- Hoja Evidencias S8.
+- Hoja Estados.
+
+Casos incorporados:
+- Pruebas de página principal y conexión con base de datos.
+- Pruebas de consulta de disponibilidad.
+- Pruebas de validaciones.
+- Pruebas de registro de reserva.
+- Pruebas de creación o reutilización de cliente.
+- Pruebas de reserva asociada a cliente real.
+- Pruebas de confirmación con cliente asociado.
+- Pruebas de panel administrador.
+- Pruebas de servicio web externo Open-Meteo.
+- Pruebas de endpoints JSON.
+- Pruebas pendientes de cierre documental: GitHub, Trello, DOD, Manual y videos.
+
+Resultado:
+La planilla S8 queda preparada para respaldar el sprint-review y la validación del DONE del release Semana 8.
+
+Observaciones:
+- No se marcaron como completadas las actividades que aún están pendientes de cierre final.
+- Se mantiene observación sobre reservas antiguas de prueba con inconsistencias en saldo_pendiente.
+- Las reservas generadas desde la aplicación actual calculan correctamente total_reserva, abono_requerido y saldo_pendiente.
+
+Pendientes:
+- Completar DOD Semana 8.
+- Crear Manual de Usuario Testing.
+- Actualizar Trello.
+- Actualizar GitHub.
+- Grabar videos finales.
