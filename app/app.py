@@ -31,6 +31,55 @@ def clp(value):
     except (TypeError, ValueError):
         return "$0"
 
+def traducir_codigo_clima(codigo):
+    """
+    Traduce el código climático entregado por Open-Meteo a una descripción
+    comprensible para el usuario.
+    """
+    descripciones = {
+        0: "Despejado",
+        1: "Principalmente despejado",
+        2: "Parcialmente nublado",
+        3: "Nublado",
+        45: "Niebla",
+        48: "Niebla con escarcha",
+        51: "Llovizna ligera",
+        53: "Llovizna moderada",
+        55: "Llovizna intensa",
+        56: "Llovizna helada ligera",
+        57: "Llovizna helada intensa",
+        61: "Lluvia ligera",
+        63: "Lluvia moderada",
+        65: "Lluvia intensa",
+        66: "Lluvia helada ligera",
+        67: "Lluvia helada intensa",
+        71: "Nevada ligera",
+        73: "Nevada moderada",
+        75: "Nevada intensa",
+        77: "Granos de nieve",
+        80: "Chubascos ligeros",
+        81: "Chubascos moderados",
+        82: "Chubascos violentos",
+        85: "Chubascos de nieve ligeros",
+        86: "Chubascos de nieve intensos",
+        95: "Tormenta eléctrica",
+        96: "Tormenta eléctrica con granizo ligero",
+        99: "Tormenta eléctrica con granizo intenso",
+    }
+
+    return descripciones.get(codigo, "Condición no clasificada")
+
+
+def formatear_fecha_hora_api(fecha_hora):
+    """
+    Convierte la fecha/hora entregada por la API a un formato más legible.
+    Ejemplo: 2026-05-01T00:15 -> 2026-05-01 00:15 hrs
+    """
+    if not fecha_hora:
+        return "No disponible"
+
+    return fecha_hora.replace("T", " ") + " hrs"
+
 
 def obtener_clima_destino():
     """
@@ -61,7 +110,11 @@ def obtener_clima_destino():
                 "ok": False,
                 "message": "El servicio externo respondió, pero no entregó datos de clima actual.",
                 "destino": "Valparaíso, Chile",
+                "fuente": "Open-Meteo",
             }
+
+        codigo_clima = clima_actual.get("weathercode")
+        fecha_hora = clima_actual.get("time")
 
         return {
             "ok": True,
@@ -70,8 +123,9 @@ def obtener_clima_destino():
             "temperatura": clima_actual.get("temperature"),
             "velocidad_viento": clima_actual.get("windspeed"),
             "direccion_viento": clima_actual.get("winddirection"),
-            "codigo_clima": clima_actual.get("weathercode"),
-            "fecha_hora": clima_actual.get("time"),
+            "condicion_clima": traducir_codigo_clima(codigo_clima),
+            "codigo_clima": codigo_clima,
+            "fecha_hora": formatear_fecha_hora_api(fecha_hora),
             "fuente": "Open-Meteo",
         }
 
