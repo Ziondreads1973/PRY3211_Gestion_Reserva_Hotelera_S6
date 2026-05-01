@@ -1,0 +1,100 @@
+MANUAL DE USUARIO TESTING - SEMANA 8
+Proyecto: PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+Asignatura: Ingeniería de Software (PRY3211)
+Release: Semana 8
+Ambiente: Local de pruebas
+
+1. Objetivo del manual
+Este manual guía al usuario testing en la ejecución de las principales funcionalidades del release Semana 8 del sistema Hotel Pacific Reef. Su finalidad es permitir la validación funcional del prototipo, registrar resultados, tiempos de ejecución y evidencias asociadas.
+
+2. Alcance del release Semana 8
+El release permite consultar disponibilidad de habitaciones, registrar reservas, crear o reutilizar clientes por correo electrónico, confirmar reservas con cliente asociado, revisar reservas desde un panel administrador, consultar información climática del destino mediante Open-Meteo y consumir recursos mediante endpoints JSON.
+
+3. Requisitos del ambiente de prueba
+- Sistema operativo con Python instalado.
+- Dependencias del proyecto instaladas desde requirements.txt.
+- Base de datos SQLite disponible en bd/hotel_pacific_reef.db.
+- Navegador Google Chrome o Mozilla Firefox.
+- Conexión a internet para probar la integración con Open-Meteo.
+
+4. Acceso al sistema
+El sistema se ejecuta en ambiente local. Para iniciar la aplicación:
+cd app
+.\venv\Scripts\Activate.ps1
+py app.py
+
+Si PowerShell bloquea la activación del entorno virtual:
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\venv\Scripts\Activate.ps1
+
+Luego abrir en el navegador:
+http://127.0.0.1:5000
+
+5. Inicio de sesión
+El release Semana 8 no requiere inicio de sesión. Las funcionalidades se encuentran disponibles desde el menú principal del prototipo. No se deben inventar credenciales para esta versión.
+
+6. Datos de prueba sugeridos
+Consulta de disponibilidad:
+Fecha entrada: 2026-05-25
+Fecha salida: 2026-05-27
+Huéspedes: 2
+
+Registro de cliente/reserva:
+Nombre: Usuario Testing S8
+Correo: usuario.testing.s8@correo.cl
+Teléfono: +56 9 8888 8888
+
+7. Pruebas funcionales
+PR-01 Página principal: abrir http://127.0.0.1:5000 y verificar que cargue el release Semana 8.
+PR-02 Verificación BD: abrir /health-db y confirmar conexión correcta con SQLite.
+PR-03 Consulta disponibilidad: ingresar fechas válidas y confirmar listado de habitaciones.
+PR-04 Validación fechas: ingresar salida anterior a entrada y verificar mensaje de error.
+PR-05 Registro reserva: seleccionar habitación, ingresar datos de contacto y confirmar reserva.
+PR-06 Confirmación: verificar código, fechas, montos y cliente asociado.
+PR-07 Panel administrador: abrir /admin/reservas y verificar reserva con cliente, correo y teléfono.
+PR-08 Información destino: abrir /destino y verificar datos de clima obtenidos desde Open-Meteo.
+PR-09 API health: abrir /api/health y verificar respuesta JSON ok=true.
+PR-10 API reservas: abrir /api/reservas y verificar listado JSON.
+PR-11 API disponibilidad: abrir /api/disponibilidad?fecha_check_in=2026-05-25&fecha_check_out=2026-05-27&cantidad_huespedes=2.
+PR-12 API clima: abrir /api/clima-destino y verificar respuesta JSON del clima.
+
+8. Tiempos esperados
+Página principal: 30 segundos.
+Verificación BD: 30 segundos.
+Consulta disponibilidad: 1 minuto.
+Registro reserva: 2 minutos.
+Confirmación: 1 minuto.
+Panel administrador: 1 minuto.
+Vista destino: 1 minuto.
+Endpoints JSON: 2 minutos.
+Tiempo total estimado: 9 a 10 minutos.
+
+9. Evidencias esperadas
+- Captura de página principal.
+- Captura de conexión a base de datos.
+- Captura de disponibilidad.
+- Captura de reserva registrada.
+- Captura de confirmación con cliente asociado.
+- Captura del panel administrador.
+- Captura de información del destino.
+- Capturas de endpoints JSON.
+- Registro de fecha, hora de inicio, hora de término y usuario testing.
+
+10. Registro de usuario testing
+Nombre usuario testing: ______________________________
+Correo contacto: _____________________________________
+Fecha aplicación: ____________________________________
+Hora inicio: _________________________________________
+Hora término: ________________________________________
+Tiempo total: ________________________________________
+Observaciones: _______________________________________
+
+11. Observaciones funcionales
+- La integración con Open-Meteo requiere conexión a internet.
+- La aplicación se ejecuta en ambiente local de pruebas.
+- El formulario de reserva no solicita RUT; el sistema genera un RUT temporal controlado para usuarios creados desde el MVP.
+- Existen reservas antiguas de prueba con inconsistencias en saldo_pendiente.
+- Las reservas generadas desde la aplicación actual calculan correctamente total_reserva, abono_requerido y saldo_pendiente.
+
+12. Cierre
+Si todas las pruebas principales se ejecutan correctamente, el release puede considerarse apto para sprint-review funcional en ambiente de pruebas, quedando pendientes solo ajustes documentales, video final, Trello, GitHub y ZIP final limpio.

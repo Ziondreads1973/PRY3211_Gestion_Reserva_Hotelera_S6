@@ -1,0 +1,36 @@
+ESTADO HITO 9 - SEMANA 8
+
+Proyecto:
+PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+
+Objetivo del hito:
+Crear el Manual de Usuario Testing para el release funcional Semana 8, permitiendo que un usuario testing pueda ejecutar y validar las principales funcionalidades del sistema en ambiente local de pruebas.
+
+Archivos generados:
+- docs/Manual_Usuario_Testing_S8_Hotel_Pacific_Reef.docx
+- docs/manual_usuario_testing_s8_contenido.txt
+
+Contenido del manual:
+- Objetivo del manual.
+- Alcance del release Semana 8.
+- Requisitos del ambiente de prueba.
+- Acceso al sistema.
+- Aclaración de que no existe login en este release.
+- Datos de prueba sugeridos.
+- Set de pruebas de usuario.
+- Tiempos esperados.
+- Evidencias esperadas.
+- Registro de usuario testing.
+- Observaciones funcionales.
+
+Observaciones:
+- La integración con Open-Meteo requiere conexión a internet.
+- El sistema se ejecuta en ambiente local de pruebas.
+- El formulario de reserva no solicita RUT; el sistema genera un RUT temporal controlado para usuarios creados desde el MVP.
+- Las reservas nuevas calculan correctamente total, abono requerido y saldo pendiente.
+
+Pendientes:
+- Actualizar Trello.
+- Verificar GitHub final.
+- Grabar videos finales.
+- Preparar ZIP final limpio.
