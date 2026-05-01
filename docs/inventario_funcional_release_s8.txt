@@ -1,0 +1,71 @@
+INVENTARIO FUNCIONAL RELEASE SEMANA 8
+
+Proyecto:
+PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+
+Estado general:
+El proyecto cuenta con un prototipo funcional en ambiente local de pruebas, desarrollado con Flask, HTML, CSS, Jinja Templates y SQLite.
+
+Funcionalidades disponibles:
+1. Página principal del sistema.
+2. Consulta de disponibilidad de habitaciones.
+3. Validación de fechas de entrada y salida.
+4. Filtro por cantidad de huéspedes.
+5. Listado de habitaciones disponibles.
+6. Registro de reserva desde interfaz web.
+7. Validación de datos de contacto.
+8. Creación o reutilización de cliente según correo.
+9. Asociación de reserva a cliente real.
+10. Cálculo automático de total, abono 30% y saldo pendiente.
+11. Confirmación de reserva con código generado.
+12. Confirmación con datos de cliente asociado.
+13. Panel administrador de reservas.
+14. Panel administrador con cliente, correo y teléfono.
+15. Verificación visual de conexión con base de datos.
+16. Integración con servicio externo Open-Meteo.
+17. Vista de información climática del destino.
+18. Endpoint JSON de estado de aplicación y base de datos.
+19. Endpoint JSON de reservas.
+20. Endpoint JSON de disponibilidad.
+21. Endpoint JSON de clima del destino.
+
+Rutas de interfaz:
+- /
+- /disponibilidad
+- /destino
+- /reservar/<id_habitacion>
+- /confirmacion/<id_reserva>
+- /admin/reservas
+- /health-db
+
+Endpoints JSON:
+- /api/health
+- /api/reservas
+- /api/disponibilidad
+- /api/clima-destino
+
+Evidencias generadas por hitos:
+- Hito 1: Auditoría MVP y actualización Semana 8.
+- Hito 2: Servicio web externo de clima.
+- Hito 3: Endpoints JSON.
+- Hito 4: Cliente asociado a reserva.
+- Hito 5: Visualización de cliente en confirmación y panel administrador.
+
+Observaciones:
+- El sistema opera en ambiente local de pruebas.
+- La integración con Open-Meteo requiere conexión a internet.
+- Existen reservas antiguas de prueba con inconsistencias en saldo_pendiente.
+- Las reservas generadas desde la aplicación actual calculan correctamente total, abono y saldo.
+- El formulario de reserva no solicita RUT; por ello, el sistema genera un RUT temporal controlado para usuarios creados desde el MVP.
+
+Pendientes para cierre de Semana 8:
+- Planilla de pruebas Semana 8.
+- DOD Semana 8.
+- Manual de Usuario Testing.
+- Evidencias finales.
+- Trello actualizado.
+- GitHub actualizado.
+- Video demostrativo funcional.
+- Presentación Teams.
+- Reflexión individual.
+- ZIP final limpio.
