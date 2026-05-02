@@ -1,19 +1,13 @@
 PRY3211 - Semana 8 - Gestión de Reserva Hotelera
 
 Repositorio GitHub:
-[Pegar enlace]
+https://github.com/Ziondreads1973/PRY3211_Gestion_Reserva_Hotelera_S6
 
 Tablero Trello:
-[Pegar enlace]
-
-Carpeta Drive evidencias:
-[Pegar enlace]
+https://trello.com/b/DMNwlD2F/pry3211-gestion-de-reserva-hotelera
 
 Video demostrativo funcional:
-[Pegar enlace]
+https://youtu.be/h2CGMhZ86Uk
 
 Grabación presentación Teams:
 [Pegar enlace]
-
-Observaciones:
-[Pegar observaciones finales]
