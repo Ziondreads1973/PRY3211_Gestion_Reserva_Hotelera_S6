@@ -1,0 +1,14 @@
+ESTADO HITO 6 - SEMANA 8
+
+Objetivo:
+Actualizar README e inventario funcional del release Semana 8.
+
+Archivos generados/modificados:
+- README.md
+- docs/inventario_funcional_release_s8.txt
+
+Resultado:
+La documentación base del proyecto queda actualizada con las funcionalidades implementadas en Semana 8, incluyendo servicio externo, endpoints JSON, cliente asociado a reserva, planilla de pruebas, DOD y manual de usuario testing.
+
+Estado:
+Completado.
