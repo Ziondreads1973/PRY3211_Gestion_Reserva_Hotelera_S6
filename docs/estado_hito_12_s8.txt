@@ -1,0 +1,28 @@
+ESTADO HITO 12 - SEMANA 8
+
+Proyecto:
+PRY3211 - Gestión de Reserva Hotelera - Hotel Pacific Reef
+
+Objetivo del hito:
+Preparar y respaldar la presentación grupal del release Semana 8.
+
+Contenido preparado:
+- Presentación del objetivo del release Semana 8.
+- Estado inicial heredado desde Semana 7.
+- Mejoras funcionales implementadas.
+- Integración con Flask, SQLite, Open-Meteo y endpoints JSON.
+- Mejora del flujo de reserva con cliente asociado.
+- Actualización de pruebas, DOD y manual de usuario testing.
+- Cierre de evidencias y videos.
+
+Archivo local:
+videos/presentacion_grupal_teams_s8.mp4
+
+Enlace presentación grupal:
+https://youtu.be/gW8u1VFBcBo
+
+Enlace video demostrativo funcional:
+https://youtu.be/h2CGMhZ86Uk
+
+Estado:
+Completado.
